@@ -1,0 +1,19 @@
+# Terraform files and folders
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+
+# Executables
+*.exe
+
+# IDE/editor folders
+.vscode/
+.idea/
+
+# Log files
+*.log
+
+# OS/OneDrive backup files
+Thumbs.db
+.DS_Store
