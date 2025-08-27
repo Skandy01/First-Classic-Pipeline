@@ -14,6 +14,7 @@ terraform {
   container = "mycnt"
   key = dev.terraform.tfsatate
 }
+}
 
 provider "azurerm" {
   features {}
