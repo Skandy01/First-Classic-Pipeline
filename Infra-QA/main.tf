@@ -66,7 +66,7 @@ module "VM" {
 
   admin_username = each.value.admin_username
   admin_password = each.value.admin_password
-  disable_password_authentication = false
+# disable_password_authentication = false
   nic_id = data.azurerm_network_interface.NIC_data[each.value.nic_key].id
 
   os_disk_caching              = each.value.os_disk_caching
