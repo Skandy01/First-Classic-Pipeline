@@ -61,14 +61,15 @@ parameters:
   type: boolean
   default: false
 
+
+variables:
+  workDir: '$(System.DefaultWorkingDirectory)/Infra-QA'
+  wif: 'Workload_Identity_Federation'
+
 jobs:
 
 - job: 'Terraform_init_plan'
   displayName: 'Terraform init to plan'
-
-  variables: 
-    workDir: '$(System.DefaultWorkingDirectory)/Infra-QA'
-    ServiceConn: '$(Workload_Identity_Federation)'
 
   pool: 'Terraform_Infra_Agent'
 
@@ -84,7 +85,7 @@ jobs:
       provider: 'azurerm'
       command: 'init'
       workingDirectory: '$(workDir)'
-      backendServiceArm: '$(ServiceConn)'
+      backendServiceArm: '$(wif)'
       backendAzureRmResourceGroupName: 'rg-terraform'
       backendAzureRmStorageAccountName: 'stgado'
       backendAzureRmContainerName: 'mycnt'
@@ -98,7 +99,7 @@ jobs:
       workingDirectory: '$(workDir)'
       outputTo: 'console'
       customCommand: 'fmt'
-      environmentServiceNameAzureRM: '$(ServiceConn)'
+      environmentServiceNameAzureRM: '$(wif)'
 
 
   - task: TerraformTask@5
@@ -114,7 +115,7 @@ jobs:
       provider: 'azurerm'
       command: 'plan'
       workingDirectory: '$(workDir)'
-      environmentServiceNameAzureRM: '$(ServiceConn)'
+      environmentServiceNameAzureRM: '$(wif)'
 
 - job: 'manual_approval'
   displayName: 'Manual Approval dedo'
@@ -134,9 +135,6 @@ jobs:
   dependsOn: 'manual_approval'
   condition: and(succeeded(), eq(${{parameters.runApply }}, true))
 
-  variables: 
-    workDir: '$(System.DefaultWorkingDirectory)/Infra-QA'
-    ServiceConn: 'Workload_Identity_Federation'
 
   pool: 'Terraform_Infra_Agent'
 
@@ -149,7 +147,7 @@ jobs:
       provider: 'azurerm'
       command: 'init'
       workingDirectory: '$(workDir)'
-      backendServiceArm: '$(ServiceConn)'
+      backendServiceArm: '$(wif)'
       backendAzureRmResourceGroupName: 'rg-terraform'
       backendAzureRmStorageAccountName: 'stgado'
       backendAzureRmContainerName: 'mycnt'
@@ -162,4 +160,4 @@ jobs:
       provider: 'azurerm'
       command: 'apply'
       workingDirectory: '$(workDir)'
-      backendServiceArm: '$(ServiceConn)'
+      backendServiceArm: '$(wif)'
