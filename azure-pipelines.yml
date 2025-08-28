@@ -4,10 +4,12 @@ pool: Azure Pipelines
 
 steps:
 - task: TerraformInstaller@1
+  displayName: "Terraform install"
   inputs:
     terraformVersion: 'latest'
 
 - task: TerraformTask@5
+  displayName: "Terraform init"
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -20,12 +22,14 @@ steps:
     backendAzureRmKey: 'dev.terraform.tfsatate'
 
 - task: TerraformTask@5
+  displayName: "Terraform validate"
   inputs:
     provider: 'azurerm'
     command: 'validate'
     workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-QA'
 
 - task: TerraformTask@5
+  displayName: "Terraform fmt"
   inputs:
     provider: 'azurerm'
     command: 'custom'
