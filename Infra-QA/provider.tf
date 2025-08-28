@@ -10,9 +10,9 @@ terraform {
   }
   backend "azurerm" {
   resource_group_name = "rg-terraform"
-  storage_account = "stgado"
-  container = "mycnt"
-  key = dev.terraform.tfsatate
+  storage_account_name = "stgado"
+  container_name = "mycnt"
+  key = "dev.terraform.tfstate"
 }
 }
 
