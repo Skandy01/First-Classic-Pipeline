@@ -35,5 +35,13 @@ steps:
     command: 'custom'
     workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-QA'
     outputTo: 'console'
-    customCommand: 'terraform fmt'
+    customCommand: 'fmt'
+    environmentServiceNameAzureRM: 'Workload_Identity_Federation'
+
+- task: TerraformTask@5
+  displayName: "Terraform Plan"
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-QA'
     environmentServiceNameAzureRM: 'Workload_Identity_Federation'
