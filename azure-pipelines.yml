@@ -2,6 +2,11 @@ trigger: none
 
 pool: Azure Pipelines
 
+variables:
+  working_dir_path: '$(System.DefaultWorkingDirectory)/Infra-QA'
+  wif: 'workload_identity_federation'
+
+
 steps:
 - task: TerraformInstaller@1
   displayName: "Terraform install"
@@ -13,8 +18,8 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-QA'
-    backendServiceArm: 'Workload_Identity_Federation'
+    workingDirectory: '$(working_dir_path)'
+    backendServiceArm: '$(wif)'
     backendAzureRmOverrideSubscriptionID: '9c521f44-ae8d-4736-9337-a8ab0038c6c7'
     backendAzureRmResourceGroupName: 'rg-terraform'
     backendAzureRmStorageAccountName: 'stgado'
@@ -26,22 +31,22 @@ steps:
   inputs:
     provider: 'azurerm'
     command: 'validate'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-QA'
+    workingDirectory: '$(working_dir_path)'
 
 - task: TerraformTask@5
   displayName: "Terraform fmt"
   inputs:
     provider: 'azurerm'
     command: 'custom'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-QA'
+    workingDirectory: '$(working_dir_path)'
     outputTo: 'console'
     customCommand: 'fmt'
-    environmentServiceNameAzureRM: 'Workload_Identity_Federation'
+    environmentServiceNameAzureRM: '$(wif)'
 
 - task: TerraformTask@5
   displayName: "Terraform Plan"
   inputs:
     provider: 'azurerm'
     command: 'plan'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-QA'
-    environmentServiceNameAzureRM: 'Workload_Identity_Federation'
+    workingDirectory: '$(working_dir_path)'
+    environmentServiceNameAzureRM: '$(wif)'
