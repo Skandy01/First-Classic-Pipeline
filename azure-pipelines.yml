@@ -56,8 +56,14 @@ trigger:
 - feature/*
 
 parameters:
+
 - name: 'runApply'
   displayName: 'Terraform_Apply chalana hai ?'
+  type: boolean
+  default: false
+
+- name: 'Scanning_Job'  
+  displayName: 'Apne code ki scanning krni hai ?'
   type: boolean
   default: false
 
@@ -117,13 +123,17 @@ jobs:
       workingDirectory: '$(workDir)'
       environmentServiceNameAzureRM: '$(wif)'
 
-- job: 'Scanning Job'
+- job: 'Scanning_Job'
 
+  condition: eq(${{ parameters.Scanning_Job }}, true)
   pool: 'Terraform_Infra_Agent'
   displayName: 'Scanning Tools Job'
 
   steps:
-  
+  - task: tfsec@1
+    inputs:
+      version: 'v1.26.0'
+      dir: '$(workDir)'
 
 - job: 'manual_approval'
   displayName: 'Manual Approval dedo'
@@ -141,8 +151,7 @@ jobs:
 
   displayName: 'Terraform init and apply'
   dependsOn: 'manual_approval'
-  condition: and(succeeded(), eq(${{parameters.runApply }}, true))
-
+  condition: and(succeeded(), eq(${{ parameters.runApply }}, true), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 
   pool: 'Terraform_Infra_Agent'
 
@@ -163,6 +172,7 @@ jobs:
   
   - task: TerraformTask@5
     displayName: 'Terraform apply'
+    condition: 
 
     inputs:
       provider: 'azurerm'
