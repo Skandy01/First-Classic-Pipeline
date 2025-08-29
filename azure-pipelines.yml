@@ -117,6 +117,14 @@ jobs:
       workingDirectory: '$(workDir)'
       environmentServiceNameAzureRM: '$(wif)'
 
+- job: 'Scanning Job'
+
+  pool: 'Terraform_Infra_Agent'
+  displayName: 'Scanning Tools Job'
+
+  steps:
+  
+
 - job: 'manual_approval'
   displayName: 'Manual Approval dedo'
   dependsOn: Terraform_init_plan
