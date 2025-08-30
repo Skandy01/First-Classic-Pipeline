@@ -5,6 +5,7 @@ trigger:
 pool: 'Terraform_Infra_Agent'
 
 parameters:
+
 - name: runApply
   displayName: 'Terraform apply chalana hai?'
   type: boolean
@@ -24,6 +25,7 @@ stages:
 
 - stage: 'Build'
   displayName: 'Build CI'
+  
   jobs:
   - job: 'Terraform_init_plan'
     displayName: 'Terraform init to plan'
