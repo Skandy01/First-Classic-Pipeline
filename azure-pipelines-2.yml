@@ -93,10 +93,10 @@ stages:
 
 
 - stage: Deploy
-
   displayName: Deploy CD with Manual Approval
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   dependsOn: Build
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))  
+  
 
   jobs:
 
@@ -107,15 +107,15 @@ stages:
     steps: 
     - task: ManualValidation@1
       inputs:
-        notifyUsers: devopscollab101@gmail.com
-        approvers: 'devopscollab101@gmail.com
+        notifyUsers: 'devopscollab101@gmail.com'
+        approvers: 'devopscollab101@gmail.com'
         instructions: Plan check karlo Bhaiya...!
 
   - job: Terraform_Apply
 
     displayName: Terraform int and apply
     dependsOn: manual_approval
-    condition: and(succeeded(), eq('${{ parameters.runApply }}', true))
+    condition: and(succeeded(), eq(${{ parameters.runApply }}, true))
 
     pool: Terraform_Infra_Agent
 
