@@ -1,0 +1,52 @@
+trigger: none
+
+pool: Azure Pipelines
+
+variables:
+  working_dir_path: '$(System.DefaultWorkingDirectory)/Infra-QA'
+  wif: 'workload_identity_federation'
+
+
+steps:
+- task: TerraformInstaller@1
+  displayName: "Terraform install"
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+  displayName: "Terraform init"
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(working_dir_path)'
+    backendServiceArm: '$(wif)'
+    backendAzureRmOverrideSubscriptionID: '9c521f44-ae8d-4736-9337-a8ab0038c6c7'
+    backendAzureRmResourceGroupName: 'rg-terraform'
+    backendAzureRmStorageAccountName: 'stgado'
+    backendAzureRmContainerName: 'mycnt'
+    backendAzureRmKey: 'dev.terraform.tfsatate'
+
+- task: TerraformTask@5
+  displayName: "Terraform validate"
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    workingDirectory: '$(working_dir_path)'
+
+- task: TerraformTask@5
+  displayName: "Terraform fmt"
+  inputs:
+    provider: 'azurerm'
+    command: 'custom'
+    workingDirectory: '$(working_dir_path)'
+    outputTo: 'console'
+    customCommand: 'fmt'
+    environmentServiceNameAzureRM: '$(wif)'
+
+- task: TerraformTask@5
+  displayName: "Terraform Plan"
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(working_dir_path)'
+    environmentServiceNameAzureRM: '$(wif)'
