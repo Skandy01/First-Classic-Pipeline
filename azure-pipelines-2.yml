@@ -138,7 +138,7 @@ stages:
     
     - task: TerraformTask@5
       displayName: Terraform apply
-      condition: 
+      condition: and(eq('${{ parameters.runApply }}', 'true'))
 
       inputs:
         provider: azurerm
