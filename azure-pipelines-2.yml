@@ -88,6 +88,8 @@ stages:
     displayName: 'Scanning Tools Job'
 
     steps:
+
+    
     - task: tfsec@1
       inputs:
         version: 'v1.26.0'
